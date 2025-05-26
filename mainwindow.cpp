@@ -46,6 +46,7 @@ void MainWindow::setupUI()
     setWindowTitle("Shopping List");
 
     connect(addButton, &QPushButton::clicked, this, &MainWindow::onAddItem);
+    connect(removeButton, &QPushButton::clicked, this, &MainWindow::onRemoveItems);
 }
 void MainWindow::onAddItem()
 {
@@ -56,5 +57,14 @@ void MainWindow::onAddItem()
         item->setCheckState(Qt::Unchecked);
         shoppingList->addItem(item);
         inputField->clear();
+    }
+}
+void MainWindow::onRemoveItems()
+{
+    for (int i = shoppingList->count() - 1; i >= 0; --i) {
+        QListWidgetItem *item = shoppingList->item(i);
+        if (item->checkState() == Qt::Checked) {
+            delete shoppingList->takeItem(i);
+        }
     }
 }

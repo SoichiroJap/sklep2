@@ -24,6 +24,7 @@ private:
     QPushButton *shopButton;
     QCheckBox *darkModeCheckBox;
     void onAddItem();
+    void onRemoveItems();
 
 
     void setupUI();
