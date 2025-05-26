@@ -3,6 +3,9 @@
 #include <QHeaderView>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QFileDialog>
+#include <QFile>
+#include <QTextStream>
 
 ShopDialog::ShopDialog(QWidget *parent)
     : QDialog(parent)
@@ -175,6 +178,36 @@ void ShopDialog::onAddToCartClicked()
     msgBox.exec();
 
     if (msgBox.clickedButton() == buyButton) {
+        QString fileName = QFileDialog::getSaveFileName(this, "Zapisz paragon", "", "Pliki tekstowe (*.txt)");
+        if (fileName.isEmpty())
+            return;
 
+        QFile file(fileName);
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QMessageBox::warning(this, "Komunikat", "Nie udało się zapisać pliku.");
+            return;
+        }
+
+        QTextStream out(&file);
+        out << "Paragon - zakupione produkty:\n\n";
+
+        double totalPrice = 0.0;
+
+        for (int i = 0; i < productTable->rowCount(); ++i) {
+            QTableWidgetItem *checkItem = productTable->item(i, 2);
+            if (checkItem->checkState() == Qt::Checked) {
+                QString product = productTable->item(i, 0)->text();
+                QString priceStr = productTable->item(i, 1)->text();
+                double price = priceStr.toDouble();
+                totalPrice += price;
+
+                out << "- " << product << ": " << priceStr << " zł\n";
+            }
+        }
+
+        out << "\nŁączna kwota: " << QString::number(totalPrice, 'f', 2) << " zł\n";
+        file.close();
+
+        QMessageBox::information(this, "Komunikat", "Paragon został zapisany.");
     }
 }
