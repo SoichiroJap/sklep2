@@ -2,15 +2,12 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QListWidget>
+#include <QPushButton>
+#include <QLineEdit>
+#include <QCheckBox>
 
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
-QT_END_NAMESPACE
-
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
@@ -18,6 +15,16 @@ public:
     ~MainWindow();
 
 private:
-    Ui::MainWindow *ui;
+    QListWidget *shoppingList;
+    QLineEdit *inputField;
+    QPushButton *addButton;
+    QPushButton *removeButton;
+    QPushButton *saveButton;
+    QPushButton *loadButton;
+    QPushButton *shopButton;
+    QCheckBox *darkModeCheckBox;
+
+    void setupUI();
 };
+
 #endif // MAINWINDOW_H
