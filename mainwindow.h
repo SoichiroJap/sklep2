@@ -23,11 +23,12 @@ private:
     QPushButton *loadButton;
     QPushButton *shopButton;
     QCheckBox *darkModeCheckBox;
+
     void onAddItem();
     void onRemoveItems();
     void onSaveToFile();
     void onLoadFromFile();
-
+    void onDarkModeToggled(bool enabled);
 
     void setupUI();
 };

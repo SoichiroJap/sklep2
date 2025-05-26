@@ -5,6 +5,7 @@
 #include <QTextStream>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QApplication>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -51,6 +52,7 @@ void MainWindow::setupUI()
     connect(removeButton, &QPushButton::clicked, this, &MainWindow::onRemoveItems);
     connect(saveButton, &QPushButton::clicked, this, &MainWindow::onSaveToFile);
     connect(loadButton, &QPushButton::clicked, this, &MainWindow::onLoadFromFile);
+    connect(darkModeCheckBox, &QCheckBox::toggled, this, &MainWindow::onDarkModeToggled);
 
 }
 
@@ -129,4 +131,25 @@ void MainWindow::onLoadFromFile()
 
     file.close();
     QMessageBox::information(this, "Wczytano", "Lista została wczytana");
+}
+
+void MainWindow::onDarkModeToggled(bool enabled)
+{
+    QPalette darkPalette;
+
+    if (enabled) {
+        darkPalette.setColor(QPalette::Window, QColor(53, 53, 53));
+        darkPalette.setColor(QPalette::WindowText, Qt::white);
+        darkPalette.setColor(QPalette::Base, QColor(42, 42, 42));
+        darkPalette.setColor(QPalette::AlternateBase, QColor(66, 66, 66));
+        darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
+        darkPalette.setColor(QPalette::ToolTipText, Qt::white);
+        darkPalette.setColor(QPalette::Button, QColor(53, 53, 53));
+        darkPalette.setColor(QPalette::BrightText, Qt::red);
+        darkPalette.setColor(QPalette::Highlight, QColor(142, 45, 197).lighter());
+        darkPalette.setColor(QPalette::HighlightedText, Qt::black);
+        qApp->setPalette(darkPalette);
+    } else {
+        qApp->setPalette(style()->standardPalette());
+    }
 }
