@@ -23,7 +23,6 @@ ShopDialog::ShopDialog(QWidget *parent)
     layout->addWidget(productTable);
     setLayout(layout);
 
-    // Produkty i ceny
     const QList<QPair<QString, double>> products = {
         {"Ser Cheddar (200g)", 8.50},
         {"Jogurt naturalny (1L)", 5.00},
@@ -142,22 +141,33 @@ ShopDialog::ShopDialog(QWidget *parent)
 void ShopDialog::onAddToCartClicked()
 {
     int selectedCount = 0;
+    double totalPrice = 0.0;
 
     for (int i = 0; i < productTable->rowCount(); ++i) {
         QTableWidgetItem *checkItem = productTable->item(i, 2);
         if (checkItem->checkState() == Qt::Checked) {
             selectedCount++;
+
+            bool ok;
+            double price = productTable->item(i, 1)->text().toDouble(&ok);
+            if (ok) {
+                totalPrice += price;
+            }
         }
     }
 
     if (selectedCount == 0) {
-        QMessageBox::information(this, "Brak zaznaczenia", "Nie wybrano żadnych produktów.");
+        QMessageBox::information(this, "Komunikat", "Nie wybrano żadnych produktów.");
         return;
     }
 
+    QString message = QString("Dodano %1 przedmiot(ów) do koszyka.\nŁączna cena: %2 zł")
+                          .arg(selectedCount)
+                          .arg(QString::number(totalPrice, 'f', 2));
+
     QMessageBox msgBox;
     msgBox.setWindowTitle("Koszyk");
-    msgBox.setText(QString("Dodano %1 przedmiot(y) do koszyka").arg(selectedCount));
+    msgBox.setText(message);
 
     QPushButton *buyButton = msgBox.addButton(tr("Kup"), QMessageBox::AcceptRole);
     QPushButton *continueButton = msgBox.addButton(tr("Kontynuuj zakupy"), QMessageBox::RejectRole);
@@ -165,8 +175,6 @@ void ShopDialog::onAddToCartClicked()
     msgBox.exec();
 
     if (msgBox.clickedButton() == buyButton) {
-
-    } else if (msgBox.clickedButton() == continueButton) {
 
     }
 }
