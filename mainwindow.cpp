@@ -76,13 +76,29 @@ void MainWindow::onAddItem()
 
 void MainWindow::onRemoveItems()
 {
+    bool anyChecked = false;
+
+    for (int i = 0; i < shoppingList->count(); ++i) {
+        QListWidgetItem *item = shoppingList->item(i);
+        if (item->checkState() == Qt::Checked) {
+            anyChecked = true;
+            break;
+        }
+    }
+
+    if (!anyChecked) {
+        QMessageBox::warning(this, "Komunikat", "Nie wybrano produktu do usunięcia");
+        return;
+    }
+
     for (int i = shoppingList->count() - 1; i >= 0; --i) {
         QListWidgetItem *item = shoppingList->item(i);
         if (item->checkState() == Qt::Checked) {
             delete shoppingList->takeItem(i);
         }
     }
-    QMessageBox::information(this, "Usunięto", "Usunięto zaznaczone elementy");
+
+    QMessageBox::information(this, "Komunikat", "Usunięto zaznaczone elementy");
 }
 
 void MainWindow::onSaveToFile()
@@ -104,7 +120,7 @@ void MainWindow::onSaveToFile()
     }
 
     file.close();
-    QMessageBox::information(this, "Zapisano", "Lista została zapisana");
+    QMessageBox::information(this, "Komunikat", "Lista została zapisana");
 }
 
 void MainWindow::onLoadFromFile()
@@ -135,7 +151,7 @@ void MainWindow::onLoadFromFile()
     }
 
     file.close();
-    QMessageBox::information(this, "Wczytano", "Lista została wczytana");
+    QMessageBox::information(this, "Komunikat", "Lista została wczytana");
 }
 
 void MainWindow::onDarkModeToggled(bool enabled)
@@ -144,15 +160,13 @@ void MainWindow::onDarkModeToggled(bool enabled)
 
     if (enabled) {
         darkPalette.setColor(QPalette::Window, QColor(53, 53, 53));
-        darkPalette.setColor(QPalette::WindowText, Qt::white);
         darkPalette.setColor(QPalette::Base, QColor(42, 42, 42));
         darkPalette.setColor(QPalette::AlternateBase, QColor(66, 66, 66));
-        darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
-        darkPalette.setColor(QPalette::ToolTipText, Qt::white);
+        darkPalette.setColor(QPalette::ToolTipBase, QColor(53, 53, 53));
+        darkPalette.setColor(QPalette::Text, Qt::darkGray);
         darkPalette.setColor(QPalette::Button, QColor(53, 53, 53));
-        darkPalette.setColor(QPalette::BrightText, Qt::red);
         darkPalette.setColor(QPalette::Highlight, QColor(142, 45, 197).lighter());
-        darkPalette.setColor(QPalette::HighlightedText, Qt::black);
+        darkPalette.setColor(QPalette::HighlightedText, Qt::white);
         qApp->setPalette(darkPalette);
     } else {
         qApp->setPalette(style()->standardPalette());
