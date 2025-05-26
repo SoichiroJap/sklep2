@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QFileDialog>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -61,6 +62,7 @@ void MainWindow::onAddItem()
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
         item->setCheckState(Qt::Unchecked);
         shoppingList->addItem(item);
+        QMessageBox::information(this, "Komunikat", "Dodano element");
         inputField->clear();
     }
 }
@@ -73,6 +75,7 @@ void MainWindow::onRemoveItems()
             delete shoppingList->takeItem(i);
         }
     }
+    QMessageBox::information(this, "Usunięto", "Usunięto zaznaczone elementy");
 }
 
 void MainWindow::onSaveToFile()
@@ -94,6 +97,7 @@ void MainWindow::onSaveToFile()
     }
 
     file.close();
+    QMessageBox::information(this, "Zapisano", "Lista została zapisana");
 }
 
 void MainWindow::onLoadFromFile()
@@ -124,4 +128,5 @@ void MainWindow::onLoadFromFile()
     }
 
     file.close();
+    QMessageBox::information(this, "Wczytano", "Lista została wczytana");
 }
