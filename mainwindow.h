@@ -26,6 +26,7 @@ private:
     void onAddItem();
     void onRemoveItems();
     void onSaveToFile();
+    void onLoadFromFile();
 
 
     void setupUI();

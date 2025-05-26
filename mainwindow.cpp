@@ -49,6 +49,8 @@ void MainWindow::setupUI()
     connect(addButton, &QPushButton::clicked, this, &MainWindow::onAddItem);
     connect(removeButton, &QPushButton::clicked, this, &MainWindow::onRemoveItems);
     connect(saveButton, &QPushButton::clicked, this, &MainWindow::onSaveToFile);
+    connect(loadButton, &QPushButton::clicked, this, &MainWindow::onLoadFromFile);
+
 }
 
 void MainWindow::onAddItem()
@@ -89,6 +91,36 @@ void MainWindow::onSaveToFile()
     for (int i = 0; i < shoppingList->count(); ++i) {
         QListWidgetItem *item = shoppingList->item(i);
         out << index++ << ". " << item->text() << "\n";
+    }
+
+    file.close();
+}
+
+void MainWindow::onLoadFromFile()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "Wczytaj listę zakupów", "", "Pliki tekstowe (*.txt)");
+    if (fileName.isEmpty())
+        return;
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return;
+    }
+
+    QTextStream in(&file);
+    shoppingList->clear();
+
+    while (!in.atEnd()) {
+        QString line = in.readLine().trimmed();
+        if (!line.isEmpty()) {
+            QRegularExpression regex("^\\d+\\.\\s*");
+            QString productName = line.remove(regex);
+
+            QListWidgetItem *item = new QListWidgetItem(productName);
+            item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
+            item->setCheckState(Qt::Unchecked);
+            shoppingList->addItem(item);
+        }
     }
 
     file.close();
