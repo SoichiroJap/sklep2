@@ -44,4 +44,17 @@ void MainWindow::setupUI()
     central->setLayout(mainLayout);
     setCentralWidget(central);
     setWindowTitle("Shopping List");
+
+    connect(addButton, &QPushButton::clicked, this, &MainWindow::onAddItem);
+}
+void MainWindow::onAddItem()
+{
+    QString text = inputField->text().trimmed();
+    if (!text.isEmpty()) {
+        QListWidgetItem *item = new QListWidgetItem(text);
+        item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
+        item->setCheckState(Qt::Unchecked);
+        shoppingList->addItem(item);
+        inputField->clear();
+    }
 }
