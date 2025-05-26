@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "shop.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFile>
@@ -53,6 +54,10 @@ void MainWindow::setupUI()
     connect(saveButton, &QPushButton::clicked, this, &MainWindow::onSaveToFile);
     connect(loadButton, &QPushButton::clicked, this, &MainWindow::onLoadFromFile);
     connect(darkModeCheckBox, &QCheckBox::toggled, this, &MainWindow::onDarkModeToggled);
+    connect(shopButton, &QPushButton::clicked, this, [=]() {
+        ShopDialog *dialog = new ShopDialog(this);
+        dialog->exec();
+    });
 
 }
 
