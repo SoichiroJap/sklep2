@@ -25,6 +25,7 @@ private:
     QCheckBox *darkModeCheckBox;
     void onAddItem();
     void onRemoveItems();
+    void onSaveToFile();
 
 
     void setupUI();

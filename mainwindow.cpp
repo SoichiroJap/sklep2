@@ -3,6 +3,7 @@
 #include <QHBoxLayout>
 #include <QFile>
 #include <QTextStream>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -47,7 +48,9 @@ void MainWindow::setupUI()
 
     connect(addButton, &QPushButton::clicked, this, &MainWindow::onAddItem);
     connect(removeButton, &QPushButton::clicked, this, &MainWindow::onRemoveItems);
+    connect(saveButton, &QPushButton::clicked, this, &MainWindow::onSaveToFile);
 }
+
 void MainWindow::onAddItem()
 {
     QString text = inputField->text().trimmed();
@@ -59,6 +62,7 @@ void MainWindow::onAddItem()
         inputField->clear();
     }
 }
+
 void MainWindow::onRemoveItems()
 {
     for (int i = shoppingList->count() - 1; i >= 0; --i) {
@@ -67,4 +71,25 @@ void MainWindow::onRemoveItems()
             delete shoppingList->takeItem(i);
         }
     }
+}
+
+void MainWindow::onSaveToFile()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, "Zapisz listę zakupów", "", "Pliki tekstowe (*.txt)");
+    if (fileName.isEmpty())
+        return;
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        return;
+    }
+
+    QTextStream out(&file);
+    int index = 1;
+    for (int i = 0; i < shoppingList->count(); ++i) {
+        QListWidgetItem *item = shoppingList->item(i);
+        out << index++ << ". " << item->text() << "\n";
+    }
+
+    file.close();
 }
