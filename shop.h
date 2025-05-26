@@ -13,6 +13,9 @@ public:
 
 private:
     QTableWidget *productTable;
+    QPushButton *addToCartButton;
+
+    void onAddToCartClicked();
 };
 
 #endif // SHOP_H
