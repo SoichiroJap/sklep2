@@ -2,6 +2,7 @@
 #define SHOP_H
 
 #include <QDialog>
+#include <QTableWidget>
 
 class ShopDialog : public QDialog
 {
@@ -9,6 +10,9 @@ class ShopDialog : public QDialog
 
 public:
     explicit ShopDialog(QWidget *parent = nullptr);
+
+private:
+    QTableWidget *productTable;
 };
 
 #endif // SHOP_H
